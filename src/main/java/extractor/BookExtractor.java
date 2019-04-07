@@ -19,7 +19,7 @@ public class BookExtractor {
             book.setIsbn(resultSet.getLong("isbn"));
             book.setPagesNumber(resultSet.getInt("pages_number"));
             book.setCategoryId(resultSet.getInt("category_id"));
-            book.setPublisherId(resultSet.getInt("publisher_id"));
+            book.setPublisherId(resultSet.getString("publisher_id"));
             bookList.add(book);
         }
         return bookList;

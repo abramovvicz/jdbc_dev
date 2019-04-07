@@ -4,11 +4,12 @@ import connection.BookstoreDataSource;
 import connection.ConnectionManager;
 import extractor.BookExtractor;
 import model.Book;
-import service.BookService;
-import service.BookServiceImpl;
 
-import javax.swing.plaf.nimbus.State;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +26,7 @@ public class BookDaoImpl implements BookDao {
                 book.setTitle(resultSet.getString("title"));
                 book.setPagesNumber(resultSet.getInt("pages_number"));
                 book.setCategoryId(resultSet.getInt("category_id"));
-                book.setPublisherId(resultSet.getInt("publisher_id"));
+                book.setPublisherId(resultSet.getString("publisher_id"));
                 booklist.add(book);
             }
             return booklist;
@@ -91,7 +92,7 @@ public class BookDaoImpl implements BookDao {
             preparedStatement.setInt(2, book.getPagesNumber());
             preparedStatement.setLong(3, book.getIsbn());
             preparedStatement.setInt(4, book.getCategoryId());
-            preparedStatement.setInt(5, book.getPublisherId());
+            preparedStatement.setString(5, book.getPublisherId());
             Integer result = preparedStatement.executeUpdate();
             System.out.println(result + " row(s) inserted");
 
@@ -102,5 +103,24 @@ public class BookDaoImpl implements BookDao {
 
     public void delete(int id) {
 
+    }
+
+    @Override
+    public void insert(String title, Long isbn, Integer pagesNumber, Integer categoryId, Integer publisherId) {
+        String insert = "insert into books values (default,?,?,?,?,?)";
+        try (Connection connection = ConnectionManager.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(insert);
+        ) {
+            preparedStatement.setString(1, title);
+            preparedStatement.setInt(2, pagesNumber);
+            preparedStatement.setLong(3, isbn);
+            preparedStatement.setInt(4, categoryId);
+            preparedStatement.setInt(5, publisherId);
+            Integer result = preparedStatement.executeUpdate();
+            System.out.println(result + " row(s) inserted");
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
     }
 }

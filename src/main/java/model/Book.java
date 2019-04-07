@@ -12,7 +12,7 @@ public class Book {
     private Integer pagesNumber;
     private Long isbn;
     private Integer categoryId;
-    private Integer publisherId;
+    private String publisherId;
 
     @Override
     public String toString() {

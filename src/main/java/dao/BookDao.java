@@ -18,4 +18,6 @@ public interface BookDao {
 
     void delete(int id);
 
+    void insert(String title, Long isbn, Integer pagesNumber, Integer categoryId, Integer publisherId);
+
 }
